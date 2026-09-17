@@ -1,0 +1,2 @@
+# using postmaster on Unix socket, default port
+# diff command failed with status 512: diff  "/home/user/postgres/source/debug/extensions/demo_hello/expected/demo_hello.out" "/home/user/postgres/source/debug/extensions/demo_hello/results/demo_hello.out" > "/home/user/postgres/source/debug/extensions/demo_hello/results/demo_hello.out.diff"Bail out!

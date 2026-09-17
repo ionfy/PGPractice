@@ -1,0 +1,19 @@
+CREATE EXTENSION demo_extension;
+SELECT sum2num(10, 20);
+ sum2num 
+---------
+      30
+(1 row)
+
+SELECT sum2num(-10, -20);
+ sum2num 
+---------
+     -30
+(1 row)
+
+SELECT sum2num(-10, 10);
+ sum2num 
+---------
+       0
+(1 row)
+
