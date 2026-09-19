@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
 CONF=$PGDATA/postgresql.conf
-RESULT_FILE=res.csv
+RESULT_FILE=results/ext_buf_res.csv
 TEMP_LOG=temp.txt
 DB=pgbench_test
+LOG_DIR="$HOME/postgres/log/debug"
+TRANSACTIONS=3000
 
 restart_db() {
-	pg_ctl -D $PGDATA restart
+	pg_ctl -D $PGDATA -l $LOG_DIR/postgres.log restart
 };
 
 set_option() {
@@ -23,7 +25,7 @@ run_and_save() {
 	BUF=$5
 	EXT=$6
 
-	pgbench -c $CLIENTS -j $THREADS -t $TR -d $DB -P 100000 > $TEMP_LOG
+	pgbench -c $CLIENTS -j $THREADS -t $TR -d $DB -P 100000 > $TEMP_LOG 2>&1
 	TPS=$( grep "tps =" $TEMP_LOG | awk '{print $3}')
 	LAT_AVG=$( grep "latency average =" $TEMP_LOG | awk '{print $4}')
 	LAT_STD=$( grep "latency stddev =" $TEMP_LOG | awk '{print $4}')
@@ -36,7 +38,7 @@ do
 	echo "Clients: $cl"
 	for n in {1..3}
 	do
-		run_and_save $cl 2 1000 $n $1 $2
+		run_and_save $cl 2 $TRANSACTIONS $n $1 $2
 	done
 done
 };
@@ -59,7 +61,7 @@ restart_db
 echo "==== start test ===="
 test_cycle 1000 1
 
-test_cyclecho "==== pg_stat off ===="
+echo "==== pg_stat off ===="
 echo "==== 500MB ===="
 set_option shared_buffers "500MB"
 set_option shared_preload_libraries "''"
@@ -67,7 +69,7 @@ restart_db
 echo "==== start test ===="
 test_cycle 500 0
 
-test_cyclecho "==== pg_stat off ===="
+echo "==== pg_stat off ===="
 echo "==== 1000MB ===="
 set_option shared_buffers "1000MB"
 set_option shared_preload_libraries "''"
