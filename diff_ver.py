@@ -5,13 +5,13 @@ RUN_N = 3
 
 rows = []
 
-with open('res_184.csv', mode='r', newline='', encoding='utf-8') as file:
+with open('results/res_184.csv', mode='r', newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
     
     for row in reader:
         rows.append(row)
 
-with open('res_master.csv', mode='r', newline='', encoding='utf-8') as file:
+with open('results/res_master.csv', mode='r', newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
     
     for row in reader:
